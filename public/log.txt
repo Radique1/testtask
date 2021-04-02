@@ -1,0 +1,9 @@
+2021-04-02 07-36-30: Order received from client
+2021-04-02 07-36-30: Order received by manager
+2021-04-02 07-36-30: Installed: Body type: Hatchback, door count: 4
+2021-04-02 07-36-30: Installed: Paint type: Paint, color: Black
+2021-04-02 07-36-30: Installed: Engine type: Diesel, engine volume: 1400
+2021-04-02 07-36-30: Installed: Transmission type: MT, gears count: 6
+2021-04-02 07-36-30: Installed: Interior type: Leather, interior color: Black
+2021-04-02 07-36-30: Installed: Additional Options: there is no additional options
+2021-04-02 07-36-30: Order completed
