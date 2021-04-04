@@ -10,6 +10,7 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,6 +32,7 @@ class CarOrderType extends AbstractType
             ->add('interior_type', ChoiceType::class, ['choices' => ['Leather' => 'Leather', 'Textile' => 'Textile']])
             ->add('interior_color', ChoiceType::class, ['choices' => ['Black' => 'Black', 'White' => 'White']])
             ->add('additionalOptions', ChoiceType::class, ['choices' => ['ABS' => 'ABS', 'ESP' => 'ESP', 'GPS' => 'GPS'], 'multiple' => true, 'required' => false])
+            ->add('email', EmailType::class)
         ;
     }
 

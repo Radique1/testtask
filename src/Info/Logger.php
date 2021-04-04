@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logger;
+namespace App\Info;
 
 use App\Enum\AdminOperationEnum;
 use http\Exception\InvalidArgumentException;
@@ -14,14 +14,14 @@ class Logger implements LoggerInterface
         $this->projectDir = __DIR__ . '/../../public';
     }
 
-    public function info(string $string): void
+    public function info(string $content): void
     {
         $time = new \DateTime();
         if (file_exists($log = $this->projectDir . '/log.txt')) {
-            file_put_contents($log, "\n" . $time->format('Y-m-d H-i-s') . ': ' . $string, FILE_APPEND);
+            file_put_contents($log, "\n" . $time->format('Y-m-d H-i-s') . ': ' . $content, FILE_APPEND);
         } else {
             $log = fopen($this->projectDir . '/log.txt', 'a');
-            fwrite($log, $time->format('Y-m-d H-i-s') . ': ' . $string);
+            fwrite($log, $time->format('Y-m-d H-i-s') . ': ' . $content);
             fclose($log);
         }
     }

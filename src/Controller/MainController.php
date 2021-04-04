@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Builder\Builder;
 use App\Form\CarOrderType;
 use App\Logger\Logger;
-use App\Logger\LoggerTrait;
+use App\Logger\Mailer;
 use App\Manager\Manager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +24,13 @@ class MainController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $manager = new Manager();
             $builder = new Builder();
+            $formData = $form->getData();
 
             $manager->setBuilder($builder);
-            $manager->handleOrder($form->getData());
+            $manager->handleOrder($formData);
 
             $newHtml = $manager->getVehicle()->printCharacteristics();
+
             return $this->render('base.html.twig', ['html' => $newHtml]);
         }
 

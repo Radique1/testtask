@@ -4,8 +4,7 @@ namespace App\Builder;
 
 use App\Car\Vehicle;
 use App\Factory\Factory;
-use App\Logger\Logger;
-use App\Logger\LoggerTrait;
+use App\Info\Logger;
 use App\Parts\AdditionalOptions;
 use App\Parts\Body;
 use App\Parts\Color;
@@ -15,13 +14,13 @@ use App\Parts\Transmission;
 
 class Builder
 {
-    use LoggerTrait;
-
     private ?Vehicle $vehicle;
+    private Logger $logger;
 
     public function __construct(?Vehicle $vehicle = null)
     {
         $this->vehicle = $vehicle;
+        $this->logger = new Logger();
     }
 
     public function startBuilding(string $type): self
@@ -34,7 +33,7 @@ class Builder
     public function createBody(string $type, int $doorCount): self
     {
         $this->vehicle->body = new Body($type, $doorCount);
-        $this->logger()->logBuilderOperation($this->vehicle->body);
+        $this->logger->logBuilderOperation($this->vehicle->body);
 
         return $this;
     }
@@ -42,7 +41,7 @@ class Builder
     public function paint(string $type, string $color): self
     {
         $this->vehicle->color = new Color($type, $color);
-        $this->logger()->logBuilderOperation($this->vehicle->color);
+        $this->logger->logBuilderOperation($this->vehicle->color);
 
         return $this;
     }
@@ -50,7 +49,7 @@ class Builder
     public function putEngine(string $type, int $volume): self
     {
         $this->vehicle->engine = new Engine($type, $volume);
-        $this->logger()->logBuilderOperation($this->vehicle->engine);
+        $this->logger->logBuilderOperation($this->vehicle->engine);
 
         return $this;
     }
@@ -58,7 +57,7 @@ class Builder
     public function makeInterior(string $type, string $color): self
     {
         $this->vehicle->interior = new Interior($type, $color);
-        $this->logger()->logBuilderOperation($this->vehicle->interior);
+        $this->logger->logBuilderOperation($this->vehicle->interior);
 
         return $this;
     }
@@ -66,7 +65,7 @@ class Builder
     public function setTransmission(string $type, int $numberOfGears): self
     {
         $this->vehicle->transmission = new Transmission($type, $numberOfGears);
-        $this->logger()->logBuilderOperation($this->vehicle->transmission);
+        $this->logger->logBuilderOperation($this->vehicle->transmission);
 
         return $this;
     }
@@ -77,7 +76,7 @@ class Builder
         foreach ($options as $option) {
             $this->vehicle->additionalOptions->addOption($option);
         }
-        $this->logger()->logBuilderOperation($this->vehicle->additionalOptions);
+        $this->logger->logBuilderOperation($this->vehicle->additionalOptions);
 
         return $this;
     }
