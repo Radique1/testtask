@@ -1,0 +1,58 @@
+version: "4.22"
+services:
+  nginx:
+    container_name: testtask_nginx
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    working_dir: /etc/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/testtask
+  php:
+    container_name: testtask_php
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    working_dir: /var/www/testtask
+    ports:
+      - "8000:8000"
+    expose:
+      - 9003
+    volumes:
+      - ./:/var/www/testtask
+  mysql:
+    container_name: testtask_mysql
+    build:
+      context: .
+      dockerfile: docker/mysql/Dockerfile
+    working_dir: /etc/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123123q
+###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/db/data:/var/lib/postgresql/data:rw
+###< doctrine/doctrine-bundle ###
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  database_data:
+###< doctrine/doctrine-bundle ###
