@@ -8,11 +8,10 @@ use App\Dto\ApiDto;
 use App\Dto\ApiServiceStateDto;
 use App\Service\Converter\PayloadConverter;
 use App\Service\Http\HttpClientService;
-use http\Exception\UnexpectedValueException;
 use Symfony\Component\Console\Helper\HelperInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpClient\Exception\ClientException;
+use Throwable;
 
 class ApiService
 {
@@ -40,23 +39,22 @@ class ApiService
         $this->questionService->init($input, $output, $helper);
 
         while (true) {
-            if (!$this->processResource()) {
-                break;
-            }
-
-            if (!$this->processAction()) {
-                continue;
-            }
-
-            $this->processPathParameters();
-
-            $entityClassName = self::API_RESOURCE_NAMESPACE . $this->state->getResource();
-
-            $this->processPayload($entityClassName);
-
             try {
+                if (!$this->processResource()) {
+                    break;
+                }
+
+                if (!$this->processAction()) {
+                    continue;
+                }
+
+                $this->processPathParameters();
+
+                $entityClassName = self::API_RESOURCE_NAMESPACE . $this->state->getResource();
+
+                $this->processPayload($entityClassName);
                 $response = $this->httpClient->request($this->state);
-            } catch (ClientException $exception) {
+            } catch (Throwable $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
                 $this->clean();
                 continue;
@@ -138,6 +136,7 @@ class ApiService
             if (!$operation->getFields()) {
                 $this->state->setPayload([]);
             }
+
 
             $this->state->setPayload(
                 $this->payloadConverter->convert(

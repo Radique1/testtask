@@ -16,7 +16,7 @@ class ApiResponseService
 
         $table = new Table($output);
 
-        $table->setHeaders(array_keys($response[0]));
+        $table->setHeaders(array_keys($response[0] ?? []));
         $table->setRows($response);
         $table->render();
     }
